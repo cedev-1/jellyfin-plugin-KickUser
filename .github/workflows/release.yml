@@ -1,0 +1,67 @@
+name: Release Plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Build
+        run: dotnet build Jellyfin.Plugin.KickUser/Jellyfin.Plugin.KickUser.csproj -c Release -o bin/Release/net9.0
+
+      - name: Create Zip
+        run: |
+          cd bin/Release/net9.0
+          zip -r ../../../Jellyfin.Plugin.KickUser.zip Jellyfin.Plugin.KickUser.dll
+        
+      - name: Calculate Hash
+        id: hash
+        run: |
+          echo "checksum=$(md5sum Jellyfin.Plugin.KickUser.zip | cut -d ' ' -f 1)" >> $GITHUB_OUTPUT
+          
+      - name: Update Manifest
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          CHECKSUM=${{ steps.hash.outputs.checksum }}
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          # Temporary file for jq output
+          tmp=$(mktemp)
+          
+          # Update the version, checksum, timestamp and sourceUrl in manifest.json
+          jq --arg ver "$VERSION" \
+             --arg sum "$CHECKSUM" \
+             --arg time "$TIMESTAMP" \
+             --arg url "https://github.com/${{ github.repository }}/releases/download/v$VERSION/Jellyfin.Plugin.KickUser.zip" \
+             '.[0].versions[0].version = $ver | .[0].versions[0].checksum = $sum | .[0].versions[0].timestamp = $time | .[0].versions[0].sourceUrl = $url' \
+             manifest.json > "$tmp" && mv "$tmp" manifest.json
+             
+      - name: Commit Manifest
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git fetch origin main
+          git checkout main
+          git checkout ${GITHUB_REF} -- manifest.json
+          git add manifest.json
+          git commit -m "Update manifest for ${{ github.ref_name }}"
+          git push origin main
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Jellyfin.Plugin.KickUser.zip
+          generate_release_notes: true
