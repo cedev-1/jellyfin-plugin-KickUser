@@ -31,6 +31,13 @@ jobs:
         id: hash
         run: |
           echo "checksum=$(md5sum Jellyfin.Plugin.KickUser.zip | cut -d ' ' -f 1)" >> $GITHUB_OUTPUT
+
+      - name: Checkout Main
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git fetch origin main
+          git checkout main
           
       - name: Update Manifest
         run: |
@@ -49,13 +56,15 @@ jobs:
              '.[0].versions[0].version = $ver | .[0].versions[0].checksum = $sum | .[0].versions[0].timestamp = $time | .[0].versions[0].sourceUrl = $url' \
              manifest.json > "$tmp" && mv "$tmp" manifest.json
              
+          echo "=== DEBUG: Manifest Content ==="
+          cat manifest.json
+          echo "=== DEBUG: Git Status ==="
+          git status
+          echo "=== DEBUG: Git Diff ==="
+          git diff
+             
       - name: Commit Manifest
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git fetch origin main
-          git checkout main
-          git checkout ${GITHUB_REF} -- manifest.json
           git add manifest.json
           git commit -m "Update manifest for ${{ github.ref_name }}"
           git push origin main
