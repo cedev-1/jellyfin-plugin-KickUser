@@ -48,20 +48,21 @@ jobs:
           # Temporary file for jq output
           tmp=$(mktemp)
           
-          # Update the version, checksum, timestamp and sourceUrl in manifest.json
+          # Add new version entry to the beginning of the versions array
           jq --arg ver "$VERSION" \
              --arg sum "$CHECKSUM" \
              --arg time "$TIMESTAMP" \
              --arg url "https://github.com/${{ github.repository }}/releases/download/v$VERSION/Jellyfin.Plugin.KickUser.zip" \
-             '.[0].versions[0].version = $ver | .[0].versions[0].checksum = $sum | .[0].versions[0].timestamp = $time | .[0].versions[0].sourceUrl = $url' \
+             '(. | .[0].versions) as $v |
+              .[0].versions = [{
+                version: $ver,
+                changelog: "See GitHub Release",
+                targetAbi: ($v[0].targetAbi // "10.11.5"),
+                sourceUrl: $url,
+                checksum: $sum,
+                timestamp: $time
+              }] + $v' \
              manifest.json > "$tmp" && mv "$tmp" manifest.json
-             
-          echo "=== DEBUG: Manifest Content ==="
-          cat manifest.json
-          echo "=== DEBUG: Git Status ==="
-          git status
-          echo "=== DEBUG: Git Diff ==="
-          git diff
              
       - name: Commit Manifest
         run: |
