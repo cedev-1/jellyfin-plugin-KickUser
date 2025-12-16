@@ -1,21 +1,21 @@
 [
-  {
-    "category": "User Management",
-    "guid": "a3c2e4f1-8b6d-4e2a-9f7c-1d3e5a8b9c4f",
-    "name": "KickUser - Inactive User Manager",
-    "owner": "cedev-1",
-    "overview": "Automatically manages inactive users by disabling or deleting them.",
-    "description": "A Jellyfin plugin that automatically disables or deletes users who have been inactive for a configurable number of days.",
-    "imageUrl": "https://github.com/cedev-1/jellyfin-plugin-KickUser/blob/main/media/banner.png",
-    "versions": [
-      {
-        "checksum": "6bce8c6569d7ece9a51e62389af334ed",
-        "version": "1.0.0.0",
-        "targetAbi": "10.11.5",
-        "sourceUrl": "https://github.com/cedev-1/jellyfin-plugin-KickUser/releases/download/v1.0.0.0/Jellyfin.Plugin.KickUser.zip",
-        "timestamp": "2025-12-16T18:43:12Z",
-        "changelog": "- Initial release with configurable threshold and actions."
-      }
-    ]
-  }
+    {
+        "category": "User Management",
+        "guid": "a3c2e4f1-8b6d-4e2a-9f7c-1d3e5a8b9c4f",
+        "name": "KickUser - Inactive User Manager",
+        "owner": "cedev-1",
+        "overview": "Automatically manages inactive users by disabling or deleting them.",
+        "description": "A Jellyfin plugin that automatically disables or deletes users who have been inactive for a configurable number of days.",
+        "imageUrl": "https://raw.githubusercontent.com/cedev-1/Jellyfin-Plugin-KickUser/main/media/banner.png",
+        "versions": [
+            {
+                "checksum": "6bce8c6569d7ece9a51e62389af334ed",
+                "version": "1.0.0.0",
+                "targetAbi": "10.11.5",
+                "sourceUrl": "https://github.com/cedev-1/jellyfin-plugin-KickUser/releases/download/v1.0.0.0/Jellyfin.Plugin.KickUser.zip",
+                "timestamp": "2025-12-16T18:43:12Z",
+                "changelog": "- Initial release with configurable threshold and actions."
+            }
+        ]
+    }
 ]
