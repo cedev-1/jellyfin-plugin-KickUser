@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>KickUser Configuration</title>
+</head>
+
+<body>
+    <div id="KickUserConfigPage" data-role="page" class="page type-interior pluginConfigurationPage"
+        data-require="emby-input,emby-button,emby-checkbox,emby-select" data-controller="__plugin/KickUserConfig">
+        <div data-role="content">
+            <div class="content-primary">
+                <form id="KickUserConfigForm">
+                    <div class="verticalSection">
+                        <h2 class="sectionTitle">KickUser</h2>
+                        <p>Automatically disable or delete users who have been inactive for a specified period.</p>
+                    </div>
+
+                    <div class="verticalSection">
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label class="emby-checkbox-label">
+                                <input id="enablePlugin" type="checkbox" is="emby-checkbox" />
+                                <span>Enable Plugin</span>
+                            </label>
+                            <div class="fieldDescription">
+                                Enable or disable the inactive user management plugin.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="verticalSection" style="margin-bottom: 2em;">
+                        <label class="inputContainer">
+                            <span class="inputLabel">Inactivity Threshold (days)</span>
+                            <input id="inactivityThresholdDays" type="number" is="emby-input" min="1" max="365" />
+                            <div class="fieldDescription">
+                                Number of days without activity before a user is considered inactive. Default is 30
+                                days.
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="verticalSection" style="margin-bottom: 2em;">
+                        <label class="selectContainer">
+                            <span class="selectLabel">Action Type</span>
+                            <select id="actionType" is="emby-select">
+                                <option value="Disable">Disable User</option>
+                                <option value="Delete">Delete User (Permanent)</option>
+                            </select>
+                            <div class="fieldDescription">
+                                Choose whether to disable users (they can be re-enabled) or permanently delete them.
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="verticalSection" style="margin-bottom: 2em;">
+                        <label class="selectContainer">
+                            <span class="selectLabel">Check Time (Hour)</span>
+                            <select id="checkHour" is="emby-select">
+                                <option value="0">00:00 (Midnight)</option>
+                                <option value="1">01:00</option>
+                                <option value="2">02:00</option>
+                                <option value="3">03:00</option>
+                                <option value="4">04:00</option>
+                                <option value="5">05:00</option>
+                                <option value="6">06:00</option>
+                                <option value="7">07:00</option>
+                                <option value="8">08:00</option>
+                                <option value="9">09:00</option>
+                                <option value="10">10:00</option>
+                                <option value="11">11:00</option>
+                                <option value="12">12:00 (Noon)</option>
+                                <option value="13">13:00</option>
+                                <option value="14">14:00</option>
+                                <option value="15">15:00</option>
+                                <option value="16">16:00</option>
+                                <option value="17">17:00</option>
+                                <option value="18">18:00</option>
+                                <option value="19">19:00</option>
+                                <option value="20">20:00</option>
+                                <option value="21">21:00</option>
+                                <option value="22">22:00</option>
+                                <option value="23">23:00</option>
+                            </select>
+                            <div class="fieldDescription">
+                                Time of day (in 24-hour format) when the inactive user check should run.
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="verticalSection">
+                        <h3>Whitelisted Users</h3>
+                        <div class="fieldDescription" style="margin-bottom: 1em;">
+                            Select users to exclude from automatic actions. Administrators are always excluded.
+                        </div>
+                        <div id="userWhitelistContainer"
+                            style="max-height: 400px; overflow-y: auto; border: 1px solid #333; padding: 10px; border-radius: 4px; background-color: rgba(0,0,0,0.2);">
+                            <div style="text-align: center; padding: 20px;">
+                                <p>Loading users...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="verticalSection">
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label class="emby-checkbox-label">
+                                <input id="dryRun" type="checkbox" is="emby-checkbox" />
+                                <span>Dry Run Mode (Test Mode)</span>
+                            </label>
+                            <div class="fieldDescription">
+                                When enabled, the plugin will log what actions it would take without actually performing
+                                them.
+                                Useful for testing your configuration.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="verticalSection">
+                        <button is="emby-button" type="submit" class="raised button-submit block">
+                            <span>Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
